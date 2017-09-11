@@ -38,9 +38,3 @@ print '-----score-----'
 print '---------------'
 for key in namedict:    #迭代循环字典
         print key,'====>',namedict[key]
-
-
-
-
-
-
