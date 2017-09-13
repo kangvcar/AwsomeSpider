@@ -6,24 +6,33 @@ class People(object):
         self.age = age
 
     def run(self):
-        print self.name,'正在走路'
+        print self.name,'正在走路...'
 
 class Teacher(People):
 
-    def __init__(self, name, age, teachObject):
-        self.name = name
-        self.age = age
+    def __init__(self, name, age, *teachObject):
+        People.__init__(self, name, age)
         self.teachObject = teachObject
 
     def Onteach(self):
-        print self.name,'老师正在授课。'
-        self.Onlisten()
+        print self.name,'老师正在授课...'
+        for i in self.teachObject:
+            print i, '正在听课...'
+
+    def Teach(self):
+        print '--------熬了50分钟--------'
 
     def Offteach(self):
-        self.run()
+        print self.name, '老师下课了...'
+        for i in self.teachObject:
+            print i
+            self.run()
 
     def Onlisten(self):
         print self.teachObject, '正在听课'
+
+    def run(self):
+        print '正在走路...'
 
 
 class Student(People):
@@ -39,16 +48,16 @@ class Student(People):
     def xiake(self):
         self.run()
 
-Liwenjin = Teacher('Liwenjin', 35, 'AllStudent')
+Liwenjin = Teacher('Liwenjin', 35, 'Hekangjian','Wuzhisheng','Zhouhaocheng')
 Hekangjian = Student('Hekangjian', 21, '07150214')
 Wuzhisheng = Student('Wuzhisheng', 20, '07150236')
 Zhouhaocheng = Student('Zhouhaocheng', 18, '07150250')
 
 Liwenjin.Onteach()
-Hekangjian.listen()
-Wuzhisheng.listen()
-Zhouhaocheng.listen()
-Hekangjian.xiake()
-Wuzhisheng.xiake()
-Zhouhaocheng.xiake()
+# Hekangjian.listen()
+# Wuzhisheng.listen()
+# Zhouhaocheng.listen()
+# Hekangjian.xiake()
+# Wuzhisheng.xiake()
+# Zhouhaocheng.xiake()
 Liwenjin.Offteach()
