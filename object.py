@@ -39,13 +39,12 @@ class Student(People):
 
     def xiake(self):
         self.run()
-
-Hekangjian = Student('Hekangjian', 21, '07150214')
-Wuzhisheng = Student('Wuzhisheng', 20, '07150236')
-Zhouhaocheng = Student('Zhouhaocheng', 18, '07150250')
-studentList = [Hekangjian,Wuzhisheng,Zhouhaocheng]
-Liwenjin = Teacher('Liwenjin', 35, studentList)
-
+if __name__ == "__main__":
+    Hekangjian = Student('Hekangjian', 21, '07150214')
+    Wuzhisheng = Student('Wuzhisheng', 20, '07150236')
+    Zhouhaocheng = Student('Zhouhaocheng', 18, '07150250')
+    studentList = [Hekangjian,Wuzhisheng,Zhouhaocheng]
+    Liwenjin = Teacher('Liwenjin', 35, studentList)
 
 Liwenjin.Onteach()
 Liwenjin.Teach()
