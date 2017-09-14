@@ -17,4 +17,4 @@ elif num > suiji:
 else:
 	print '太小了'
 
-
+print 'the first homeworks'
