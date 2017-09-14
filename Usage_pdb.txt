@@ -1,0 +1,34 @@
+Pdb: The Python Debugger Python调试器
+
+h(elp): 打印当前版本 Pdb可用的命令
+
+l(ist):	显示当前代码的部分上下文
+l(ist) <line number> 显示指定行的上下文
+l(ist) <line number1, line number2> 显示指定开始行到结束行的代码
+w(here) 找出当前代码运行位置
+
+u(p) 返回上个调用点
+d(own) 返回下个调用点
+
+a(rgs) 显示当前所有变量
+p(rint) 打印表达式结果
+pp 打印美化过的表达式结果
+
+s(tep) 步进运行至下行代码（如果是调用函数，则运行至所调用函数的第一行）
+n(ext) 运行至下行代码（如果是调用函数，会直接运行完此函数）
+unt(il) 运行至当前代码端底部
+r(eturn) 运行至return代码处
+run <arg...> 重新运行程序（断点设置不会丢失）
+c(ont(inue)) 运行程序直至遇到下一个断点
+j(ump) lineno 跳转至指定程序行（如果是前行，则忽略中间行代码。如果是后退，状态重设为回退行状态）
+[!]statement 运行python命令，比如!test='hello' 将会把test变量的值改变为hello
+
+b(reak) <line number> 运行时设置断点
+b(reak) <file name:line number> 运行时设置另一个文件的断点
+b(reak) 显示断点情况
+cl(ear) <break number> 删除断点
+cl(ear) 删除断点
+disable <break number> 将指定的断点失效（但存在）
+enable <break number> 将指定的断点生效
+
+q(uit): 直接退出调试
