@@ -2,7 +2,6 @@
 
 import urllib
 import urllib2
-import json
 # #爬取网页
 # response = urllib2.urlopen('http://fanyi.youdao.com')
 # html = response.read()
