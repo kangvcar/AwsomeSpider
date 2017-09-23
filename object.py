@@ -35,7 +35,7 @@ class Student(People):
         self.xuehao = xuehao
 
     def listen(self):
-        print self.name,self.xuehao,'正在听课'
+        print self.name,self.xuehao,'正在听课...'
 
     def xiake(self):
         self.run()

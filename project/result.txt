@@ -1,23 +1,23 @@
-﻿苏州今日天气
+苏州今日天气
 星期六
-23℃~20℃
+24℃~20℃
 阵雨
-东风 1级
+东风 2级
 http://img.tianqi.com/static/images/tianqibig/b3.png
 
 苏州明日天气
 星期日
-24℃~21℃
+25℃~21℃
 阵雨
 东风 3-4级
 http://img.tianqi.com/static/images/tianqibig/b3.png
 
 苏州后天天气
 星期一
-26℃~23℃
-阵雨
+25℃~23℃
+中雨
 东南风 3-4级
-http://img.tianqi.com/static/images/tianqibig/b3.png
+http://img.tianqi.com/static/images/tianqibig/b8.png
 
 苏州26日天气
 星期二

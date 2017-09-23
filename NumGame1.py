@@ -6,9 +6,11 @@
 # @Version : $Id$
 
 import random
-
+import pdb
 
 suiji = random.randint(1,10)
+print '1111'
+pdb.set_trace()
 num = int(raw_input('请输入你猜的数字:'))
 if num == suiji:
 	print '恭喜你！猜对了！！！'
