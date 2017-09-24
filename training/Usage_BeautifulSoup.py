@@ -8,6 +8,13 @@
 ## 首先必须要导入 bs4 库
 from bs4 import BeautifulSoup
 
+## 安装BeautifulSoup
+# pip install beautifulsoup4
+# easy_install beautifulsoup4
+## 安装 lxml 
+# pip install lxml
+# easy_install lxml
+
 ## 创建一个字符串，后面的例子我们便会用它来演示
 html = """
 <html><head><title>The Dormouse's story</title></head>
