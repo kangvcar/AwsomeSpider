@@ -149,6 +149,7 @@ soup = BeautifulSoup(html, "lxml")
 ## 搜索文档树
 # 1.find_all( name , attrs , recursive , text , **kwargs )
 # find_all() 方法搜索当前tag的所有tag子节点,并判断是否符合过滤器的条件
+# 返回list
 	# name 参数
 	# name 参数可以查找所有名字为 name 的tag,字符串对象会被自动忽略掉
 		# A.传字符串
