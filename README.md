@@ -1,6 +1,10 @@
-#pyproject
+# pyproject
 
 > 2017 python爬虫学习
+
+## Usage_pdb.txt
+Pdb: The Python Debugger </br>
+Python调试器 使用方法快速入门
 
 ## NumGame Folders
 ### -NumGame1.py
@@ -68,7 +72,3 @@ Selenium 快速入门，实例学习
 Urllib2 快速入门，实例学习
 ### - training/Usage_XPath.py
 XPath 快速入门，实例学习
-
-## Usage_pdb.txt
-Pdb: The Python Debugger </br>
-Python调试器 使用方法快速入门
