@@ -8,31 +8,46 @@
 import ssl
 from selenium import webdriver
 
-# 取消证书认证
-ssl._create_default_https_context = ssl._create_unverified_context()
-# 调用PhantomJS启动浏览器
-browser = webdriver.PhantomJS()
-# 打开链接
-browser.get('https://www.jisilu.cn/data/cbnew/#tlink_3')
-# 延迟3秒，等待页面加载完成
-browser.implicitly_wait(3)
-# 打开文件并以追加模式写入
-with open('kzz.txt', 'a') as fp:
-    a = 0
-    # 匹配前四行数据，并循环处理
-    for tr in browser.find_elements_by_xpath('/html/body/div[3]/div[1]/div[1]/table/tbody/tr'):
-        # # 获取每行的前面11条数据
-        # for i in range(11):
-        a += 1
-        if a % 2 == 0:
-            for i in range(23):
-                # 以空格分割每行数据，并迭代获取数据
-                content = tr.text.split(' ')[i]
-                # content 为 tuple 类型，用小标提取后进行硬编码为utf-8
-                fp.write(content.encode('utf-8'))
-                fp.write('\t')
-            # 写入一行数据后换行
-            fp.write('\n')
+def Start(url):
+    # 取消证书认证
+    ssl._create_default_https_context = ssl._create_unverified_context()
+    # 调用PhantomJS启动浏览器
+    browser = webdriver.PhantomJS()
+    # 打开链接
+    browser.get(url)
+    # 延迟3秒，等待页面加载完成
+    browser.implicitly_wait(3)
+    return browser
+
+def Sigle_Double(number):
+    SD = number
+    return SD
+
+def Spider(filename, url2, number2):
+
+    # 打开文件并以追加模式写入
+    with open(filename, 'a') as fp:
+        # 调用start方法，并传入url
+        browser1 = Start(url2)
+        # 指定要获取的单行还是双行，1 为单行，2为双行
+        SD = Sigle_Double(number2)
+        a = 0
+        # 匹配前四行数据，并循环处理
+        for tr in browser1.find_elements_by_xpath('/html/body/div[3]/div[1]/div[1]/table/tbody/tr'):
+            # # 获取每行的前面11条数据
+            # for i in range(11):
+            a += 1
+            if a % 2 == SD:
+                for i in range(23):
+                    # 以空格分割每行数据，并迭代获取数据
+                    content = tr.text.split(' ')[i]
+                    # content 为 tuple 类型，用小标提取后进行硬编码为utf-8
+                    fp.write(content.encode('utf-8'))
+                    fp.write('\t')
+                # 写入一行数据后换行
+                fp.write('\n')
+
+Spider('kkk1.txt', 'https://www.jisilu.cn/data/cbnew/#tlink_3', 1)
 
 ## kzz.txt
 # 113009	广汽转债	127.00	0.00%	广汽集团	27.21	0.00%	3.73	21.430	126.97	0.02%	购买	购买	15.00	27.86	1.8%	22-01-22	4.323	-3.23%	-3.65%	购买	0.00	0.84
