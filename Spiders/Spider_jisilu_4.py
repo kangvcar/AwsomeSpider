@@ -16,10 +16,17 @@ class JSL:
 	#传入is_ssl的值,1为使用ssl认证,0为禁用ssl认证
 	#传入single_line的值,1为获取单行数据,2为获取双行数据,默认为0获取所有数据
 	def __init__(self, url, filename, is_ssl, single_line=0):
+		#爬虫的url
 		self.url = url
+		#保存内容的文件名
 		self.filename = filename
+		#设置是否启用ssl
 		self.ssl = is_ssl
+		#设置获取哪些行
 		self.single_line = single_line
+		#定义xpath
+		self.xpath = '/html/body/div[3]/div[1]/div[1]/table/tbody/tr'
+		#调用setSsl方法
 		self.setSsl()
 
 	#定义ssl方法
@@ -46,8 +53,7 @@ class JSL:
 	#传入网页源码，获取匹配的内容，然后写入contents并返回
 	def getContent(self, browser):
 		contents = []
-		for tr in browser.find_elements_by_xpath('/html/body/div[3]/div[1]/div[1]/table/tbody/tr'):
-		# for tr in browser.find_elements_by_xpath('//*[@id="flex3"]/tbody/tr'):
+		for tr in browser.find_elements_by_xpath(self.xpath):
 			content = tr.text.encode('utf-8')
 			contents.append(content)
 		return contents
@@ -80,12 +86,13 @@ class JSL:
 			self.writeData(contents)
 			print u"内容已写入" + self.filename
 
+
 #实例化对象jsl
 #传入url
 #传入filename文件名
 #传入is_ssl的值,1为使用ssl认证,0为禁用ssl认证
 #传入single_line的值,1为获取单行数据,2为获取双行数据,默认为0获取所有数据
-jsl = JSL("https://www.jisilu.cn/data/cbnew/#tlink_3",'kkk1.txt', 0, 2)
+jsl = JSL("https://www.jisilu.cn/data/cbnew/#tlink_3", '07150214-2.txt', 0, 2)
 # jsl = JSL("https://www.jisilu.cn/data/cf/#stock",'kkk2.txt', 0, 0)
 # jsl = JSL("https://www.jisilu.cn/data/sfnew/#tlink_3",'kkk2.txt', 0, 0)	#更改xpath为//*[@id="flex3"]/tbody/tr
 #调用start方法
