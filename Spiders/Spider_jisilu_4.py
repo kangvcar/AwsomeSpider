@@ -85,6 +85,7 @@ class JSL:
 				file.write(content + '\n')
 		file.close()
 
+	#发送邮件方法
 	def sendEmail(self, notice_contents):
 		#函数_format_addr()用来格式化一个邮件地址
 		def _format_addr(s):
@@ -112,6 +113,7 @@ class JSL:
 		server.sendmail(from_addr, to_addr, msg.as_string()) 	#发邮件
 		server.quit()
 
+	#判断是否超过预设阈值方法
 	def judgmentIncrease(self, contents):
 		notice_contents = []	#定义list,用于存储大于预设阈值的数据
 		for i, line in enumerate(contents):
