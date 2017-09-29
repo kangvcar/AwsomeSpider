@@ -37,6 +37,13 @@ class JSL:
 		self.increase_threshold = increase_threshold
 		#定义xpath
 		self.xpath = '/html/body/div[3]/div[1]/div[1]/table/tbody/tr'
+		#Email地址和口令:
+		self.from_addr = 'kangvcar123@163.com'
+		self.password = 'pyproject123'
+		#SMTP服务器地址:
+		self.smtp_server = 'smtp.163.com'
+		#收件人地址:
+		self.to_addr = 'kangvcar123@163.com'	
 		#调用setSsl方法
 		self.setSsl()
 
@@ -94,12 +101,12 @@ class JSL:
 				Header(name, 'utf-8').encode(),\
 				addr.encode('utf-8') if isinstance(addr, unicode) else addr))
 		#Email地址和口令:
-		from_addr = 'kangvcar123@163.com'
-		password = 'pyproject123'
+		from_addr = self.from_addr
+		password = self.password
 		#SMTP服务器地址:
-		smtp_server = 'smtp.163.com'
+		smtp_server = self.smtp_server
 		#收件人地址:
-		to_addr = 'kangvcar123@163.com'	
+		to_addr = self.to_addr	
 		#构造邮件
 		msgtext = "\n".join(notice_contents)
 		msg = MIMEText(msgtext, 'plain', 'utf-8')
@@ -144,7 +151,7 @@ class JSL:
 #传入filename文件名
 #传入is_ssl的值,1为使用ssl认证,0为禁用ssl认证
 #传入single_line的值,1为获取单行数据,2为获取双行数据,默认为0获取所有数据
-jsl = JSL("https://www.jisilu.cn/data/cbnew/#tlink_3", '07150214-2.txt', 0, 2, 0.3)
+jsl = JSL("https://www.jisilu.cn/data/cbnew/#tlink_3", '07150214-2.txt', 0, 2, 0.1)
 # jsl = JSL("https://www.jisilu.cn/data/cf/#stock",'kkk2.txt', 0, 0)
 # jsl = JSL("https://www.jisilu.cn/data/sfnew/#tlink_3",'kkk2.txt', 0, 0)	#更改xpath为//*[@id="flex3"]/tbody/tr
 #调用start方法
