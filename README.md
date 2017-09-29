@@ -2,9 +2,13 @@
 
 > 2017 python爬虫学习
 
+
+
 ## Usage_pdb.txt
 Pdb: The Python Debugger </br>
 Python调试器 使用方法快速入门
+
+
 
 ## NumGame Folders
 ### -NumGame1.py
@@ -28,6 +32,8 @@ Python调试器 使用方法快速入门
 ### -Youdao-reptile.py
 使用 urllib2 爬取有道翻译的源代码并写入Youdao.txt文件
 
+
+
 ## project Folders
 > Scrapy 爬虫框架目录结构
 ```
@@ -45,14 +51,26 @@ project/
 ### -project/spiders/suzhouSpider.py
 爬取www.suzhou.tianqi.com 页面的六天天气,并写入result.txt文件
 
+
+
 ## Spiders Folders
 > python 爬虫项目
 ### - Spiders/Spider_jisilu.py
 使用 selenium 爬取www.jisilu.com 页面的部分数据并写入文件
+### - Spiders/Spider_jisilu_2.py
+基于Spiders/Spider_jisilu.py, 把各部分改成def函数
+### - Spiders/Spider_jisilu_3.py
+基于Spiders/Spider_jisilu.py, 增加了标题的输出
+### - Spiders/Spider_jisilu_4.py
+基于Spiders/Spider_jisilu.py, 使用面向对象的方法重构代码
 ### - Spiders/Spider_qiushibaike.py
 爬取 www.qiushibaike.com 页面的段子，并实现回车查看段子，按Q退出
 ### - Spiders/Spider_SZtianqi.py
 使用 BeautifulSoup 爬取 www.suzhou.tianqi.com 页面的数据，并用BeautifulSoup过滤
+### - Spiders/Spider_tieba.py
+爬取 tieba.baidu.com 页面的帖子并写入文件，使用面向对象编程
+
+
 
 ## training Folders
 > 各爬虫工具模块的快速入门学习, 实例验证
