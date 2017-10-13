@@ -26,12 +26,14 @@ class getMovieInfo(object):
 		self.urls = self.getUrls(self.url)
 		print u'获取urls成功.正在爬取网页...'
 		self.items = self.spider(self.urls)
-		print u'爬取网页成功.'
+		print u'已爬取所有网页.'
 		print time.time()
+		self.pipeline2print = self.pipeline2print(self.items)
+		print u'已全部输出到屏幕'
 		# self.pipeline2file = self.pipeline2file(self.items)
 		# print u'写入文件成功'
-		self.pipeline2mysql = self.pipeline2mysql(self.items)
-		print u'写入数据库成功'
+		# self.pipeline2mysql = self.pipeline2mysql(self.items)
+		# print u'写入数据库成功'
 		print time.time()
 
 	def getUrls(self, url):
@@ -43,8 +45,8 @@ class getMovieInfo(object):
 		# print fPage
 		ul= self.url.split('-')
 		# print ul
-		# for page in range(1, int(fPage)+1):
-		for page in range(1, 10):
+		for page in range(1, int(fPage)+1):
+		# for page in range(1, 10):
 			ul[-1] = str(page) + '.html'
 			url = '-'.join(ul)
 			urls.append(url)
@@ -84,7 +86,11 @@ class getMovieInfo(object):
 		soup = BeautifulSoup(html, 'lxml')
 		filename = soup.find('div', attrs={'class':'bm_h cl'}).h1.a.get_text().strip().encode('utf-8')
 		return filename
-	
+
+	def pipeline2print(self, items):
+		for item in items:
+			print('类型:%s \t片名:%s \t发布者:%s \t发布时间:%s\n\n' %(item.mtype.encode('utf-8'), item.mtitle.encode('utf-8'), item.mauthor.encode('utf-8'), item.mtime.encode('utf-8')))
+			
 	def pipeline2file(self, items):
 		filename = self.filename.decode('utf-8') + '.txt'
 		# print self.filename
@@ -118,5 +124,5 @@ class getMovieInfo(object):
 		return html
 
 
-test = getMovieInfo('http://www.xixizhan.com/forum-59-1.html')
+test = getMovieInfo('http://www.xixizhan.com/forum-41-1.html')
 #http://www.xixizhan.com/forum-39-1.html
