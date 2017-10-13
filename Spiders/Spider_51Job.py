@@ -8,6 +8,7 @@
 import urllib2
 from bs4 import BeautifulSoup
 import re
+import MySQLdb
 
 class Item(object):
 	'''定义Item类'''
@@ -19,19 +20,24 @@ class Item(object):
 	
 class getJobInfo(object):
 	"""get www.51job.com Info"""
-	def __init__(self, url):
-		self.url = url
+	def __init__(self, job):
+		self.job = job
+		self.baseurl = 'http://search.51job.com/list/030200,000000,0000,00,9,99,'
+		self.url = self.baseurl + self.job + ',2,1.html'
 		self.firstPage = self.getPage(self.url)
 		self.urls = self.getUrls(self.firstPage)
 		self.items = self.spider(self.urls)
-		self.pipelines(self.items)
+		# self.pipelines2file(self.items)
+		self.pipelines2mysql(self.items)
 	
 	def getPage(self, url):
+		''' 获取网页源代码 '''
 		response = urllib2.urlopen(url)
 		html = response.read()
 		return html
 	
 	def getUrls(self, firstPage):
+		''' 获取urls列表 '''
 		s = '共(.*?)页'.decode('utf-8')
 		defPage = re.compile(s)
 		# print self.firstPage.decode('gbk')
@@ -47,45 +53,62 @@ class getJobInfo(object):
 		return urls
 	
 	def spider(self, urls):
+		''' 爬取item类定义的信息'''
 		items = []
 		for url in urls:
 			html = self.getPage(url)
 			soup = BeautifulSoup(html, 'lxml')
 			divs1 = soup.find('div', attrs={'id':'resultList'})
 			divlists = divs1.find_all('div', attrs={'class': 'el'})
-			divlists.pop(0)
 			for div in divlists:
-				item = Item()
-				if len(div.get_text().split()) == 5:
-					item.JobName = div.get_text().split()[0]
-					item.CompanyName = div.get_text().split()[1]
-					item.WorkPlace = div.get_text().split()[2]
-					item.Salary = div.get_text().split()[3]
-					item.Time = div.get_text().split()[4]
-					items.append(item)
-				else:
+				try:
+					item = Item()
+					print unicode(div.find('p', attrs={'class':'t1'}).get_text().strip())
+					item.JobName = unicode(div.find('p', attrs={'class':'t1'}).get_text().strip())
+					print unicode(div.find('span', attrs={'class':'t2'}).a.get_text())
+					item.CompanyName = unicode(div.find('span', attrs={'class':'t2'}).a.get_text())
+					print unicode(div.find('span', attrs={'class':'t3'}).get_text())
+					item.WorkPlace = unicode(div.find('span', attrs={'class':'t3'}).get_text())
+					print unicode(div.find('span', attrs={'class':'t4'}).get_text())
+					item.Salary = unicode(div.find('span', attrs={'class':'t4'}).get_text())
+					print unicode(div.find('span', attrs={'class':'t5'}).get_text())
+					item.Time = unicode(div.find('span', attrs={'class':'t5'}).get_text())
+				except:
 					pass
 					continue
-				# item.JobName = div.a.get_text().strip()
-				# item.CompanyName = div.find('span', attrs={'class':'t2'}).a.string.strip()
-				# item.WorkPlace = div.find('span', attrs={'class':'t3'}).get_text().strip()
-				# item.Salary = div.find('span', attrs={'class':'t4'}).get_text().strip()
-				# item.Time = div.find('span', attrs={'class':'t5'}).get_text().strip()
-				
+				else:
+					items.append(item)
 		return items
 	
-	def pipelines(self, items):
-		# Job = self.url.split(',')[-3].encode('GBK')
-		# fileName = Job + '.txt'
-		fileName = u'51Job招聘信息.txt'
+	def pipelines2file(self, items):
+		''' 把爬取到的数据存储到文件'''
+		# Job = self.url.split(',')[-3]
+		fileName = self.job + u'的招聘信息.txt'
+		# fileName = u'51Job招聘信息.txt'
 		with open(fileName, 'w') as fp:
 			fp.write('%-35s \t| %-30s \t| %-20s \t| %20s \t| %20s \n' %('职位名', '公司名', '工作地点', '薪资', '发布时间'))
 			for item in items:
 				fp.write('%-40s \t| %-40s \t| %-20s \t| %20s \t| %20s \n' %(item.JobName.encode('utf-8'), item.CompanyName.encode('utf-8'), item.WorkPlace.encode('utf-8'), item.Salary.encode('utf-8'), item.Time.encode('utf-8')))
 
-# JI = getJobInfo('http://search.51job.com/list/030200,000000,0000,00,9,99,Python%2B%25E7%2588%25AC%25E8%2599%25AB,2,1.html')
-# JI = getJobInfo('http://search.51job.com/list/030200,000000,0000,00,9,99,linux%25E8%25BF%2590%25E7%25BB%25B4,2,1.html')
-JI = getJobInfo('http://search.51job.com/list/030200,000000,0000,00,9,99,PHP,2,1.html')
-# JI = getJobInfo('http://search.51job.com/list/030200,000000,0000,00,9,99,%25E9%2594%2580%25E5%2594%25AE,2,1.html')
-# http://search.51job.com/list/030200,000000,0000,00,9,99,Python%2B%25E7%2588%25AC%25E8%2599%25AB,2,1.html
-# http://search.51job.com/list/030200,000000,0000,00,9,99,Python%2B%25E7%2588%25AC%25E8%2599%25AB,2,2.html
+	def pipelines2mysql(self, items):
+		''' 把爬取到的数据存储到数据库'''
+		conn = MySQLdb.connect(
+				host='192.168.10.10',
+				port=3306,
+				user='crawl123',
+				passwd='crawl123',
+				db='scrapyDB',
+				charset = 'utf8')
+		cur = conn.cursor()
+		for item in items:
+			JobName = item.JobName.encode('utf-8')
+			CompanyName = item.CompanyName.encode('utf-8')
+			WorkPlace = item.WorkPlace.encode('utf-8')
+			Salary = item.Salary.encode('utf-8')
+			Time1 = item.Time.encode('utf-8')
+			cur.execute("INSERT INTO pythonjobs(JobName, CompanyName, WorkPlace, Salary, Time1) values(%s,%s,%s,%s,%s)", (JobName,CompanyName,WorkPlace,Salary,Time1))
+		cur.close()
+		conn.commit()
+		conn.close()
+
+JI = getJobInfo('python')
