@@ -112,3 +112,8 @@ class getJobInfo(object):
 		conn.close()
 
 JI = getJobInfo('python')
+
+
+#创建数据表命令
+#create database scrapyDB character set 'utf8' collate 'utf8_general_Ci'
+#create table jobs( id int auto_increment, JobName char(60), CompanyName char(60), WorkPlace char(60), Salary char(60), Time1 char(60), primary key(id))engine=InnoDB DEFAULT CHARSET=utf8;
