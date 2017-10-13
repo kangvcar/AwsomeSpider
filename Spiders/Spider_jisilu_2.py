@@ -29,6 +29,7 @@ def Spider(filename, url2, number2):
     with open(filename, 'a') as fp:
         # 调用start方法，并传入url
         browser1 = Start(url2)
+        print type(browser1)
         # 指定要获取的单行还是双行，1 为单行，2为双行
         SD = Sigle_Double(number2)
         a = 0

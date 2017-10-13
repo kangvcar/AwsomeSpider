@@ -19,18 +19,22 @@ def _format_addr(s):
 		addr.encode('utf-8') if isinstance(addr, unicode) else addr))
 
 # 输入Email地址和口令:
-from_addr = raw_input('From:')	#kangvcar123@163.com
-password = raw_input('Password:')	#xxxxxxxx
+# from_addr = raw_input('From:')	#kangvcar123@163.com
+# password = raw_input('Password:')	#xxxxxxxx
+from_addr = 'kangvcar123@163.com'
+password = 'pyproject123'
 # 输入SMTP服务器地址:
-smtp_server = raw_input('SMTP server:')	#smtp.163.com
+# smtp_server = raw_input('SMTP server:')	#smtp.163.com
+smtp_server = 'smtp.163.com'
 # 输入收件人地址:
-to_addr = raw_input('To:') 	##kangvcar123@163.com
+# to_addr = raw_input('To:') 	##kangvcar123@163.com
+to_addr = 'kangvcar123@163.com'
 # 构造邮件
 msg = MIMEText('hello, send by Python...123', 'plain', 'utf-8')
 
 msg['From'] = _format_addr(u'Python爱好者<%s>' % from_addr)
 msg['To'] = _format_addr(u'管理员<%s>' % to_addr)
-msg['Subject'] = Header(u'来自SMTP的问候······', 'utf-8').encode()
+msg['Subject'] = Header(u'来自SMTP的问候······22', 'utf-8').encode()
 
 server = smtplib.SMTP(smtp_server, 25) 	# SMTP协议默认端口是25
 server.set_debuglevel(1)		#可以打印出和SMTP服务器交互的所有信息

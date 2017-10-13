@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/pyproject.iml" filepath="$PROJECT_DIR$/.idea/pyproject.iml" />
+      <module fileurl="file://D:/DEVELOP/Python/Python网路爬虫源代码/源代码/.idea/源代码.iml" filepath="D:/DEVELOP/Python/Python网路爬虫源代码/源代码/.idea/源代码.iml" />
     </modules>
   </component>
 </project>

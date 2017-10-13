@@ -41,7 +41,7 @@ soup = BeautifulSoup(html, "lxml")
 # print soup.find_all(['a','b'])
 
 ## 找到所有的tag,但是不会返回字符串节点,返回list
-# for tag in soup.find_all(True):
+# for tag in soup.find_all(Tag):
 # 	print tag.name
 
 ## 传入方法，如果这个方法返回 True 表示当前元素匹配并且被找到,如果不是则反回 False
