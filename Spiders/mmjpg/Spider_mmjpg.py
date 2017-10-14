@@ -19,7 +19,7 @@ class get_mm_pic(object):
 		print u'已获取所有页面的url'
 		self.page_links = self.get_page_links(self.urls)
 		print u'已获取所有图集的link'
-		self.download_all_pic = self.download_all_pic(self.page_links)
+		self.download_all_pic(self.page_links)
 		print u'已下载所有图片'
 		
 	def get_sum_page(self, url):
@@ -32,15 +32,16 @@ class get_mm_pic(object):
 		''' 用总页数来组合拼接出所有页面的url 并返回包含所有url 的list '''
 		urls = []
 		ul = self.url.split('/')
+		print ul
 		for page in range(1, int(sumpage)+1):
 		# for page in range(1, 2):
 			ul[-1] = str(page)
-			url = '/'.join(ul)
+			url = '/'.join(ul) 
 			urls.append(url)
 		return urls
 	
 	def get_page_links(self, urls):
-		''' 获取每个图集的 link '''
+		""" 获取每个图集的 link """
 		page_links = []
 		for url in urls:
 			try:
@@ -55,11 +56,15 @@ class get_mm_pic(object):
 	def download_all_pic(self, page_links):
 		''' 进入所有图集，并下载所有图片 '''
 		for page_link in page_links:
+			''' 进入单个图集'''
 			try:
 				selector = self.get_source_page(page_link)
 				album_title = selector.xpath('//div[@class="article"]/h2/text()')[0]
+				# album_title 为图集的标题，用于命名文件夹
 				sum_pic = selector.xpath('//div[@id="page"]/a[last()-1]/text()')[0]
+				# sum_pic 为图集的总图片数量
 				path = self.mk_pic_dir(album_title)
+				# 以图集的标题为文件夹名 创建 文件夹
 			except:
 				continue
 			for pic in range(1, int(sum_pic)+1):
