@@ -6,9 +6,11 @@
 # @Version : $Id$
 
 import urllib2
+import requests
 from lxml import html
 import os
 import time
+import random
 
 class get_babehub_pic(object):
 	def __init__(self, url):
@@ -19,15 +21,26 @@ class get_babehub_pic(object):
 		print self.get_current_time() + u' 总共获取' + str(self.sum_pages) + u'页...'
 		self.all_page_urls = self.get_all_page_urls(self.sum_pages)	#获取所有页面的url
 		print self.get_current_time() + u' 总共获取' + str(len(self.all_page_urls)) + u'个页面的url...'
-		self.all_album_urls = self.get_all_album_urls(self.all_page_urls)		#获取所有图集的url,返回的是一个dict字典
-		print self.get_current_time() + u' 总共获取' + str(len(self.all_album_urls)) + u'个图集的url成功...'
-		self.download_album_to_dir = self.get_download_album_to_dir(self.all_album_urls)		#下载所有图片并保存到以图集名称命名的文件夹
-		print self.get_current_time() + u' 已载所有图片并保存到以图集名称命名的文件夹...'
+		self.all_album_and_video_urls = self.get_all_album_and_video_urls(self.all_page_urls)		#获取所有图集的url,返回的是一个tuple,包含两个元素
+		self.all_album_urls = self.all_album_and_video_urls[0]		#所有图集urls
+		print self.get_current_time() + u' 总共获取' + str(len(self.all_album_urls)) + u'个图集的url...'
+		self.all_video_urls = self.all_album_and_video_urls[1]		#所有视频urls
+		print self.get_current_time() + u' 总共获取' + str(len(self.all_video_urls)) + u'个视频的url...'
+		# self.download_album_to_dir = self.get_download_album_to_dir(self.all_album_urls)		#下载所有图片并保存到以图集名称命名的文件夹
+		# print self.get_current_time() + u' 已载所有图片并保存到以图集名称命名的文件夹...'
+		self.download_video_to_dir = self.get_download_video_to_dir(self.all_video_urls)		#下载所有图片并保存到以图集名称命名的文件夹
+		# print self.get_current_time() + u' 已载所有视频并保存到以视频标题名称命名的文件夹...'
+		# self.headers = {
+		# 	'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
+		# 	'Accept-Encoding': 'gzip, deflate',			# 'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+		# 	'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+		# 	'Accept-Language': 'zh-CN,zh;q=0.8'
+		# }
 		
 	def get_sum_page(self, url):
 		'''获取总页数...'''
 		print self.get_current_time() + u' 正在获取总页数...'
-		sum_pages = 2
+		sum_pages = 5
 		return sum_pages
 	
 	def get_all_page_urls(self, sum_pages):
@@ -35,23 +48,25 @@ class get_babehub_pic(object):
 		print self.get_current_time() + u' 正在根据总页数，获取所有页面的url...'
 		all_page_urls_list = []
 		ul = self.url.split('/')
-		for page in range(2, int(sum_pages) + 1):
+		for page in range(1, int(sum_pages) + 1):
 			ul[-1] = str(page)
 			url = '/'.join(ul)
 			all_page_urls_list.append(url)
 		return all_page_urls_list
 		
-	def get_all_album_urls(self, all_page_urls):
+	def get_all_album_and_video_urls(self, all_page_urls):
 		'''获取所有图集的url...'''
-		print self.get_current_time() + u' 正在获取所有图集的url...'
-		all_album_urls_dict = {}
+		print self.get_current_time() + u' 正在获取所有图集和视频的url...'
+		all_album_urls_dict = {}	#存储图集title和url
+		all_video_urls_dict = {}	#存储视频title和url
 		for page_url in all_page_urls:
 			try:
 				selector = self.get_source_page(page_url)
-				album_li_tags = selector.xpath('//article[@id="content"]/ul//li')
 			except:
 				continue
-			for album_li_tag in album_li_tags:
+			album_li_tags = selector.xpath('//article[@id="content"]/ul//li[not(@class)]')
+			video_li_tags = selector.xpath('//article[@id="content"]/ul//li[@class="vid"]')
+			for album_li_tag in album_li_tags:		#匹配图集urls
 				try:
 					album_title = album_li_tag.xpath('./a/span/text()')[0]
 					album_url = album_li_tag.xpath('./a/@href')[0]
@@ -59,7 +74,15 @@ class get_babehub_pic(object):
 					continue
 				else:
 					all_album_urls_dict[album_title] = album_url
-		return all_album_urls_dict
+			for video_li_tag in video_li_tags:		#匹配视频urls
+				try:
+					video_title = video_li_tag.xpath('./a/span/text()')[0]
+					video_url = video_li_tag.xpath('./a/@href')[0]
+				except:
+					continue
+				else:
+					all_video_urls_dict[video_title] = video_url
+		return all_album_urls_dict, all_video_urls_dict		#返回的是tuple
 	
 	# 注意：传入的all_album_urls 为dict字典
 	def get_download_album_to_dir(self, all_album_urls):
@@ -68,7 +91,7 @@ class get_babehub_pic(object):
 		a = 0
 		for album_title, album_url in all_album_urls.items():
 			a += 1
-			album_dir_name = self.mk_album_dir(album_title)
+			album_dir_name = self.mk_dir(album_title)
 			try:
 				selector = self.get_source_page(album_url)
 				album_pic_srcs = selector.xpath('//article[@id="content"]//ul[1]//li/a/@href')
@@ -84,13 +107,44 @@ class get_babehub_pic(object):
 					print self.get_current_time() + u' 下载图集 <' + album_title + u'> 失败!!!'
 					continue
 			print self.get_current_time() + u' 下载图集' + str(a) + u' <' + album_title + u'> 成功...'
-		
-	def mk_album_dir(self, dirname):
+	
+	def get_download_video_to_dir(self, all_video_urls):
+		'''下载所有视频并保存到以视频名称命名的文件夹...'''
+		print self.get_current_time() + u' 下载所有视频并保存到以视频名称命名的文件夹...'
+		a = 0
+		for video_title, video_url in all_video_urls.items():
+			a += 1
+			video_dir_name = self.mk_dir(video_title)
+			# if status == 'fail':
+			# 	print self.get_current_time() + ' ' + video_title + u'视频目录已存在,已跳过下载该视频...'
+			# 	continue
+			try:
+				selector = self.get_source_page(video_url)
+				video_src = selector.xpath('//article[@id="content"]//video/source[position()=2]/@src')[0]
+			except:
+				continue
+			else:
+				try:
+					video_name = video_dir_name + '/' + str(a) + '.webm'
+					print self.get_current_time() + u' 正在下载视频 ' + video_name + u'...'
+					# print video_src
+					video_response = requests.get(video_src)
+					video_data = video_response.content
+					if video_data:
+						with open(video_name, 'wb') as vf:
+							vf.write(video_data)
+				except:
+					print self.get_current_time() + ' ' + video_name + u' 视频' + str(a) + u'下载失败！！！！'
+				else:
+					print self.get_current_time() + u' 已下载视频 ' + str(a) + video_name + u'到本地...'
+	
+	def mk_dir(self, dirname):
 		'''创建文件夹'''
-		print self.get_current_time() + u' 正在创建文件夹' + dirname + u'...'
 		path = dirname
-		if not os.path.exists(path):
-			os.mkdir(path)
+		if os.path.exists(path):
+			path = dirname + str(random.randint(1,5000))
+		os.mkdir(path)
+		print self.get_current_time() + u' 成功创建文件夹' + path + u'...'
 		return path
 	
 	def get_current_time(self):
