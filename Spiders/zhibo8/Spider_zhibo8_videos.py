@@ -18,11 +18,14 @@ class videoItem(object):
 	
 class get_video_zhibo8_info(object):
 	def __init__(self, url):
+		print u'爬虫开始...'
 		self.url = url
 		self.page_title = self.get_page_title(self.url)
 		self.video_title_lists = self.get_video_title_list(self.url)
 		self.video_info_lists = self.get_video_info_list(self.video_title_lists)
 		self.print_video_info(self.video_info_lists)
+		self.write_video_info(self.video_info_lists)
+		print u'爬虫完成...'
 	
 	def get_page_title(self, url):
 		'''获取页面的大标题'''
@@ -49,7 +52,7 @@ class get_video_zhibo8_info(object):
 	
 	def get_video_info_list(self, video_title_lists):
 		video_info_lists = []
-		for video in video_title_lists:
+		for i, video in enumerate(video_title_lists):
 			video_info_items = videoItem()
 			try:
 				selector = self.get_source_page(video.video_link)
@@ -60,17 +63,31 @@ class get_video_zhibo8_info(object):
 			except:
 				continue
 			else:
+				print u'已获取第' + str(i+1) + u'条视频信息...'
 				video_info_lists.append(video_info_items)
 		return video_info_lists
 	
 	def print_video_info(self, video_info_lists):
 		'''打印所有视频的信息和链接'''
+		print self.page_title
 		for video_info_list in video_info_lists:
 			print u'视频标题 >>> ' + video_info_list.video_title
 			print u'视频来源 >>> ' + video_info_list.video_source
 			print u'视频链接 >>> ' + video_info_list.video_src
 			print u'发布时间 >>> ' + video_info_list.video_time
 			print '>>>>>>>>>>>>>>>>' * 5
+			
+	def write_video_info(self, video_info_lists):
+		'''打印所有视频的信息和链接'''
+		filename = u'NBA篮球滚动视频-标题-链接.txt'
+		with open(filename, 'w') as f:
+			f.write(self.page_title.encode('utf-8') + '\n')
+			for video_info_list in video_info_lists:
+				f.write(u'视频标题 >>> '.encode('utf-8') + video_info_list.video_title.encode('utf-8') + '\n')
+				f.write(u'视频来源 >>> '.encode('utf-8') + video_info_list.video_source.encode('utf-8') + '\n')
+				f.write(u'视频链接 >>> '.encode('utf-8') + video_info_list.video_src.encode('utf-8') + '\n')
+				f.write( u'发布时间 >>> '.encode('utf-8') + video_info_list.video_time.encode('utf-8') + '\n')
+				f.write(u'>>>>>>>>>>>>>>>>' * 5 + '\n')
 	
 	def get_source_page(self, url):
 		'''获取网页源码，并使用lxml格式化源码'''

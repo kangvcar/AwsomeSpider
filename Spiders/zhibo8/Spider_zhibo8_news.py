@@ -14,18 +14,19 @@ class newsItem(object):
 	news_source = None
 	news_time = None
 	news_info = None
-	
 
 class get_news_zhibo8_info(object):
 	def __init__(self, url):
+		print u'爬虫开始...'
 		self.url = 'https://news.zhibo8.cc/nba/more.htm'
 		self.page_title = self.get_page_title(self.url)
 		self.news_title_lists = self.get_news_title_list(self.url)
-		# self.news_info_lists = self.get_news_info_list(self.news_title_lists)
+		self.news_info_lists = self.get_news_info_list(self.news_title_lists)
 		self.print_news_title(self.news_title_lists)
-		# self.print_news_info(self.news_info_lists)
-		
-	
+		self.write_news_title(self.news_title_lists)
+		self.print_news_info(self.news_info_lists)
+		self.write_news_info(self.news_info_lists)
+		print u'爬虫完成...'
 
 	def get_page_title(self, url):
 		'''获取页面的大标题'''
@@ -53,7 +54,7 @@ class get_news_zhibo8_info(object):
 		
 	def get_news_info_list(self, news_title_lists):
 		news_info_lists = []
-		for news in news_title_lists:
+		for i, news in enumerate(news_title_lists):
 			news_info_items = newsItem()
 			selector = self.get_source_page(news.news_link)
 			news_info_items.news_info = selector.xpath('.//div[@id="signals"]//p/text()')		#list
@@ -62,10 +63,12 @@ class get_news_zhibo8_info(object):
 			news_info_items.news_source = news.news_source
 			news_info_items.news_time = news.news_time
 			news_info_lists.append(news_info_items)
+			print u'正在获取第' + str(i+1) + u'条新闻的详细内容...'
 		return news_info_lists
 			
 	def print_news_title(self, news_title_lists):
 		'''打印所有新闻标题'''
+		print self.page_title
 		for new_title_list in news_title_lists:
 			print u'新闻标题 >>> ' + new_title_list.news_title
 			print u'新闻链接 >>> ' + new_title_list.news_link
@@ -73,8 +76,21 @@ class get_news_zhibo8_info(object):
 			print u'发布时间 >>> ' + new_title_list.news_time
 			print '>>>>>>>>>>>>>>>>' * 5
 			
+	def write_news_title(self, news_title_lists):
+		'''把所有新闻标题写入文件'''
+		filename = u'NBA篮球滚动新闻-标题.txt'
+		with open(filename, 'w') as f:
+			f.write(self.page_title.encode('utf-8') + '\n')
+			for new_title_list in news_title_lists:
+				f.write(u'新闻标题 >>> '.encode('utf-8') + new_title_list.news_title.encode('utf-8') + '\n')
+				f.write(u'新闻链接 >>> '.encode('utf-8') + new_title_list.news_link.encode('utf-8') + '\n')
+				f.write(u'新闻来源 >>> '.encode('utf-8') + new_title_list.news_source.encode('utf-8') + '\n')
+				f.write(u'发布时间 >>> '.encode('utf-8') + new_title_list.news_time.encode('utf-8') + '\n')
+				f.write(u'>>>>>>>>>>>>>>>>' * 5 + '\n')
+			
 	def print_news_info(self, news_info_lists):
 		'''打印所有新闻的详细内容'''
+		print self.page_title
 		for news_info_list in news_info_lists:
 			print u'新闻标题 >>> ' + news_info_list.news_title
 			print u'新闻链接 >>> ' + news_info_list.news_link
@@ -82,6 +98,19 @@ class get_news_zhibo8_info(object):
 			print u'新闻来源 >>> ' + news_info_list.news_source
 			print u'发布时间 >>> ' + news_info_list.news_time
 			print '>>>>>>>>>>>>>>>>' * 5
+			
+	def write_news_info(self, news_info_lists):
+		'''把所有新闻的详细内容写入文件'''
+		filename = u'NBA篮球滚动新闻-标题-详细内容.txt'
+		with open(filename, 'w') as f:
+			f.write(self.page_title.encode('utf-8') + '\n')
+			for news_info_list in news_info_lists:
+				f.write(u'新闻标题 >>> '.encode('utf-8') + news_info_list.news_title.encode('utf-8') + '\n')
+				f.write(u'新闻链接 >>> '.encode('utf-8') + news_info_list.news_link.encode('utf-8') + '\n')
+				f.write(u'新闻内容 >>> '.encode('utf-8') + '\n'.join(news_info_list.news_info).encode('utf-8') + '\n')
+				f.write(u'新闻来源 >>> '.encode('utf-8') + news_info_list.news_source.encode('utf-8') + '\n')
+				f.write(u'发布时间 >>> '.encode('utf-8') + news_info_list.news_time.encode('utf-8') + '\n')
+				f.write(u'>>>>>>>>>>>>>>>>' * 5 + '\n')
 		
 	def get_source_page(self, url):
 		'''获取网页源码，并使用lxml格式化源码'''
