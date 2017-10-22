@@ -21,7 +21,7 @@ class save2pdf(object):
 	def get_page_urls(self, url):
 		page_urls_list = []
 		soup = self.get_source_page(url)
-		page_div = soup.find('div', attrs={'id': '001374738125095c955c1e6d8bb493182103fac9270762a000'})
+		page_div = soup.find('div', attrs={'id': '0013739516305929606dd18361248578c67b8067c8c017b000'})
 		page_a_urls = page_div.find_all('a')
 		page_urls = []
 		for page_a_url in page_a_urls:
@@ -68,10 +68,8 @@ class save2pdf(object):
 			],
 			'outline-depth': 10,
 		}
-		pdfkit.from_file(filename_list, u'Python2.7.pdf',  options=options)
-		for html in filename_list:
-			os.remove(html)
-        print u'已完成'
+		pdfkit.from_file(filename_list, u'Git.pdf',  options=options)
+		
 			
 	def get_source_page(self, url):
 		try:
@@ -82,5 +80,6 @@ class save2pdf(object):
 		finally:
 			return soup
 
-lxf2pdf = save2pdf('https://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000')
+# lxf2pdf = save2pdf('https://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000')
+lxf2pdf = save2pdf('https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000')
 # https://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000
