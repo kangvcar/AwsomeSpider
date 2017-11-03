@@ -28,28 +28,28 @@ class get_babehub_pic(object):
 		# self.to_addr = '15875458822@163.com'
 		print self.get_current_time() + u' 正在爬取' + self.url + u'站点...'
 		# 获取总页数
-		# self.sum_pages = self.get_sum_page(self.url)
+		self.sum_pages = self.get_sum_page(self.url)
 		# 获取所有页面的url
-		# self.all_page_urls = self.get_all_page_urls(self.sum_pages)
+		self.all_page_urls = self.get_all_page_urls(self.sum_pages)
 		# 获取所有图集的url,返回的是一个tuple,包含两个元素
-		# self.all_album_and_video_urls = self.get_all_album_and_video_urls(self.all_page_urls)
+		self.all_album_and_video_urls = self.get_all_album_and_video_urls(self.all_page_urls)
 		# 所有图集urls, dict
-		# self.all_album_urls = self.all_album_and_video_urls[0]
+		self.all_album_urls = self.all_album_and_video_urls[0]
 		# 所有视频urls, dict
-		# self.all_video_urls = self.all_album_and_video_urls[1]
+		self.all_video_urls = self.all_album_and_video_urls[1]
 		# 下载所有图片并保存到以图集名称命名的文件夹
-		# self.download_album_to_dir = self.get_download_album_to_dir(self.all_album_urls)
-		# print self.get_current_time() + u' 已载所有图片并保存到以图集名称命名的文件夹...'
-		# 下载所有图片并保存到以图集名称命名的文件夹
+		self.download_album_to_dir = self.get_download_album_to_dir(self.all_album_urls)
+		print self.get_current_time() + u' 已载所有图片并保存到以图集名称命名的文件夹...'
+		# 下载所有视频并保存到以图集名称命名的文件夹
 		# self.download_video_to_dir = self.get_download_video_to_dir(self.all_video_urls)
 		# print self.get_current_time() + u' 已载所有视频并保存到以视频标题名称命名的文件夹...'
 		#######################################################################
 		# 获取所有图片的src
 		# self.all_album_pic_srcs = self.get_all_album_pic_srcs(self.all_album_urls)
 		# 获取所有webm格式视频的src
-		self.all_video_webm_srcs = self.get_all_video_webm_srcs('http://www.babehub.com/video-archive/page/1')
+		# self.all_video_webm_srcs = self.get_all_video_webm_srcs('http://www.babehub.com/video-archive/page/1')
 		# 发送所有图片或者视频的src到邮箱
-		self.send_email_as_src(self.all_video_webm_srcs)
+		# self.send_email_as_src(self.all_album_pic_srcs)
 		# headers 在下载视频的函数get_download_video_to_dir()里可能会需要
 		# self.headers = {
 		# 	'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
@@ -61,7 +61,7 @@ class get_babehub_pic(object):
 	def get_sum_page(self, url):
 		'''获取总页数...'''
 		print self.get_current_time() + u' 正在获取总页数...'
-		sum_pages = 2
+		sum_pages = 1
 		print self.get_current_time() + u' 总共获取' + str(sum_pages) + u'页...'
 		return sum_pages
 	
@@ -225,7 +225,7 @@ class get_babehub_pic(object):
 				addr.encode('utf-8') if isinstance(addr, unicode) else addr))
 		
 		# Email地址和口令:
-		from_addr = 'kangvcar123@163.com'
+		from_addr = 'kangvcar1234@163.com'
 		password = 'pyproject1234'
 		# SMTP服务器地址:
 		smtp_server = 'smtp.163.com'
@@ -241,7 +241,7 @@ class get_babehub_pic(object):
 		
 		server = smtplib.SMTP(smtp_server, 25)  # SMTP协议默认端口是25
 		# server = smtplib.SMTP_SSL(smtp_server, 465)  # SMTP协议默认端口是25
-		server.set_debuglevel(1)		#可以打印出和SMTP服务器交互的所有信息
+		# server.set_debuglevel(1)		#可以打印出和SMTP服务器交互的所有信息
 		server.login(from_addr, password)  # 登录SMTP服务器
 		server.sendmail(from_addr, to_addr, msg.as_string())  # 发邮件
 		server.quit()
