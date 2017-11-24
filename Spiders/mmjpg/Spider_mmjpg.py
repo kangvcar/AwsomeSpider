@@ -6,7 +6,6 @@
 # @Version : $Id$
 
 import urllib2
-import re
 from lxml import html
 import os
 
@@ -31,9 +30,10 @@ class get_mm_pic(object):
 	def get_all_page_urls(self, sumpage):
 		''' 用总页数来组合拼接出所有页面的url 并返回包含所有url 的list '''
 		urls = []
-		ul = self.url.split('/')
-		print ul
-		for page in range(1, int(sumpage)+1):
+		baseurl = 'http://www.mmjpg.com/home/'
+		ul = baseurl.split('/')
+		# for page in range(1, int(sumpage)+1):
+		for page in range(2, 3):
 		# for page in range(1, 2):
 			ul[-1] = str(page)
 			url = '/'.join(ul) 
@@ -78,8 +78,10 @@ class get_mm_pic(object):
 					continue
 				else:
 					try:
+						req = urllib2.Request(src)
+						req.add_header('Referer','http://img.mmjpg.com/')
 						with open(path + '/' + filename, 'wb') as fp:
-							fp.write(urllib2.urlopen(src, timeout=3).read())
+							fp.write(urllib2.urlopen(req, timeout=3).read())
 					except:
 						continue
 	
@@ -112,8 +114,10 @@ class get_mm_pic(object):
 			selector = None
 		finally:
 			return selector
-		
-mm = get_mm_pic('http://www.mmjpg.com/home/1')
+
+
+# mm = get_mm_pic('http://www.mmjpg.com/home/1')
+mm = get_mm_pic('http://www.mmjpg.com/')
 # mm = get_mm_pic('http://www.mmjpg.com/tag/xinggan/1')
 # http://www.mmjpg.com/home/1
 #http://www.mmjpg.com/tag/xinggan/3
