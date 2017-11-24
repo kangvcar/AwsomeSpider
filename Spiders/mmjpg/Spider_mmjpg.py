@@ -32,9 +32,7 @@ class get_mm_pic(object):
 		urls = []
 		baseurl = 'http://www.mmjpg.com/home/'
 		ul = baseurl.split('/')
-		# for page in range(1, int(sumpage)+1):
-		for page in range(2, 3):
-		# for page in range(1, 2):
+		for page in range(1, int(sumpage)+1):
 			ul[-1] = str(page)
 			url = '/'.join(ul) 
 			urls.append(url)
@@ -72,7 +70,6 @@ class get_mm_pic(object):
 					print u'正在下载-->' + album_title + u'-->第' + str(pic) + u'张美图...'
 					pic_link = page_link + '/' + str(pic)
 					src = self.get_pic_link(pic_link)
-					# filename = '%s%s.jpg' %(album_title, pic)
 					filename = '%s.jpg' % (pic)
 				except:
 					continue
