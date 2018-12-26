@@ -42,7 +42,7 @@ class okSpider(object):
         '''获取需要爬取多少个列表页'''
         pageurls = []
         ul = "-".join(url.split('-')[:-1])
-        for page in range(6, sumpage+1):
+        for page in range(1, sumpage+1):
             pageurls.append(ul + "-" + str(page) + ".html")
         return pageurls
 
@@ -144,7 +144,7 @@ class okSpider(object):
 
 
 # ISO-8859-1
-ok = okSpider('http://www.okzy.co/?m=vod-index-pg-2.html', 10)
+ok = okSpider('http://www.okzy.co/?m=vod-index-pg-2.html', 2)
 # ok = okSpider('http://www.okzy.co/?m=vod-type-id-22-pg-1.html', 1)
 
 # url = 'http://www.okzy.co/?m=vod-type-id-1-pg-1.html'
