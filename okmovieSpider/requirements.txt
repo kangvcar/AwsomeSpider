@@ -12,7 +12,7 @@ greenlet==0.4.15
 idna==2.7
 itsdangerous==0.24
 Jinja2==2.10
-lxml==4.2.5
+lxml==4.9.1
 MarkupSafe==1.0
 maxminddb==1.4.1
 mysql-connector-python==8.0.13
