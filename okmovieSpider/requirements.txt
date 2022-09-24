@@ -15,7 +15,7 @@ Jinja2==2.10
 lxml==4.2.5
 MarkupSafe==1.0
 maxminddb==1.4.1
-mysql-connector-python==8.0.13
+mysql-connector-python==8.0.14
 post==1.0.2
 protobuf==3.18.3
 psutil==5.4.7
