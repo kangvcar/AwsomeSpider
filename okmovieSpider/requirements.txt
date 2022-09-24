@@ -18,7 +18,7 @@ maxminddb==1.4.1
 mysql-connector-python==8.0.13
 post==1.0.2
 protobuf==3.18.3
-psutil==5.4.7
+psutil==5.6.6
 public==1.0.3
 pycparser==2.19
 query-string==1.0.2
